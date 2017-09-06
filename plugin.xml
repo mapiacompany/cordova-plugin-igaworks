@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        id="ionic-plugin-igaworks"
+        version="0.0.1">
+
+    <name>ionic-IGAworks</name>
+
+    <description>
+      This is the unofficial plugin for IGAworks in Apache Cordova/PhoneGap!
+    </description>
+        
+    <repo>https://github.com/mapiacompany/ionic-plugin-igaworks</repo>
+
+    <license>Apache 2.0</license>
+
+    <preference name="APP_KEY" />
+    <preference name="HASH_KEY" />
+    <preference name="SERVER_TYPE" />
+
+    <engines>
+        <!-- Requires > 3.5.0 because of the custom Framework tag for iOS [CB-6698] -->
+        <!-- Requires > 4.0.0 because of the Framework tag for Android that uses gradle -->
+        <engine name="cordova-android" version=">=3.5.0" />
+        <engine name="cordova-ios" version=">=3.5.0" />
+    </engines>
+
+    <!-- android -->
+    <platform name="android">
+        <js-module src="www/igaworks-native.js" name="IGAworksConnectPlugin">
+            <clobbers target="igaWorksConnectPlugin" />
+        </js-module>
+
+        <config-file target="res/xml/config.xml" parent="/*">
+            <feature name="IGAworksConnectPlugin">
+                <param name="android-package" value="org.apache.cordova.igaworks.IGAworksConnectPlugin" />
+                <param name="onload" value="true" />
+            </feature>
+            <access origin="*" />
+            <preference name="android-minSdkVersion" value="15" />
+        </config-file>
+
+        <source-file src="src/android/igaworksconnect.xml" target-dir="res/values" />
+        <config-file target="res/values/igaworksconnect.xml" parent="/*">
+            <string name="igaworks_reward_server_type">$SERVER_TYPE</string>
+            <string name="igaworks_app_key">$APP_KEY</string>
+            <string name="igaworks_hash_key">$HASH_KEY</string>
+        </config-file>
+
+        <config-file target="AndroidManifest.xml" parent="application">
+            <meta-data android:name="igaworks_reward_server_type" android:value="@string/igaworks_reward_server_type" />
+            <meta-data android:name="igaworks_app_key" android:value="@string/igaworks_app_key" />
+            <meta-data android:name="igaworks_hash_key" android:value="@string/igaworks_hash_key" />
+            <activity android:name="com.igaworks.adpopcorn.activity.ApOfferWallActivity_NT"
+                android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
+            <activity android:name="com.igaworks.adpopcorn.activity.ApVideoAdActivity"
+                android:theme="@android:style/Theme.NoTitleBar"
+                android:screenOrientation="landscape"/>
+        </config-file>
+
+        <lib-file src="src/android/libs/IgawAdpopcorn_v5.0.5a.jar"/>
+        <lib-file src="src/android/libs/IgawCommon_v4.5.1a.jar"/>
+
+        <!-- cordova plugin src files -->
+        <source-file src="src/android/IGAworksConnectPlugin.java" target-dir="src/org/apache/cordova/igaworks" />
+
+    </platform>
+
+    <!-- ios -->
+    <!-- <platform name="ios">
+        <js-module src="www/igaworks-native.js" name="IGAworksConnectPlugin">
+            <clobbers target="igaWorksConnectPlugin" />
+        </js-module>
+
+        <config-file target="config.xml" parent="/*">
+            <feature name="IGAworksConnectPlugin">
+                <param name="ios-package" value="IGAworksConnectPlugin"/>
+                <param name="onload" value="true" />
+            </feature>
+            <plugin name="IGAworksConnectPlugin" value="IGAworksConnectPlugin"/>
+            <access origin="https://m.facebook.com" />
+            <access origin="https://graph.facebook.com" />
+            <access origin="https://api.facebook.com" />
+            <access origin="https://*.fbcdn.net" />
+            <access origin="https://*.akamaihd.net" />
+        </config-file>
+
+        <header-file src="src/ios/FacebookConnectPlugin.h" />
+        <source-file src="src/ios/FacebookConnectPlugin.m" />
+
+        <config-file target="*-Info.plist" parent="FacebookAppID">
+            <string>$APP_ID</string>
+        </config-file>
+
+        <config-file target="*-Info.plist" parent="FacebookDisplayName">
+            <string>$APP_NAME</string>
+        </config-file>
+
+        <config-file target="*-Info.plist" parent="CFBundleURLTypes">
+          <array>
+            <dict>
+              <key>CFBundleURLSchemes</key>
+              <array>
+                <string>fb$APP_ID</string>
+              </array>
+            </dict>
+          </array>
+        </config-file>
+
+        <config-file target="*-Info.plist" parent="NSAppTransportSecurity">
+          <dict>
+            <key>NSExceptionDomains</key>
+            <dict>
+                <key>facebook.com</key>
+                <dict>
+                    <key>NSIncludesSubdomains</key>
+                    <true/>
+                    <key>NSThirdPartyExceptionRequiresForwardSecrecy</key>
+                    <false/>
+                </dict>
+                <key>fbcdn.net</key>
+                <dict>
+                    <key>NSIncludesSubdomains</key>
+                    <true/>
+                    <key>NSThirdPartyExceptionRequiresForwardSecrecy</key>
+                    <false/>
+                </dict>
+                <key>akamaihd.net</key>
+                <dict>
+                    <key>NSIncludesSubdomains</key>
+                    <true/>
+                    <key>NSThirdPartyExceptionRequiresForwardSecrecy</key>
+                    <false/>
+                </dict>
+            </dict>
+          </dict>
+        </config-file>
+
+        <config-file target="*-Info.plist" parent="LSApplicationQueriesSchemes">
+          <array>
+            <string>fbapi</string>
+            <string>fb-messenger-api</string>
+            <string>fbauth2</string>
+            <string>fbshareextension</string>
+          </array>
+        </config-file>
+
+        <framework src="src/ios/AdPopcornDA.framework" custom="true" />
+        <framework src="src/ios/AdPopcornOfferwall.framework" custom="true" />
+        <framework src="src/ios/IgaworksCore.framework" custom="true" />
+
+    </platform> -->
+
+    <!-- after_prepare hook to populate APP_KEY -->
+    <hook type="after_prepare" src="scripts/after_prepare.js" />
+</plugin>
