@@ -4,7 +4,7 @@
         id="ionic-plugin-igaworks"
         version="0.0.1">
 
-    <name>ionic-IGAworks</name>
+    <name>ionic-plugin-igaworks</name>
 
     <description>
       This is the unofficial plugin for IGAworks in Apache Cordova/PhoneGap!
