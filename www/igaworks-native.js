@@ -1,15 +1,16 @@
-function IGAworksManager() {}  
+function IGAworksConnectPlugin() {}  
 
-IGAworksManager.prototype.startSession = function() {
-  cordova.exec(null, null, "IGAworksManager", "startSession", []);
+IGAworksConnectPlugin.prototype.setUserID = function(userID, s, f) {
+  cordova.exec(s, f, "IGAworksConnectPlugin", "setUserID", [userID]);
 };
 
-IGAworksManager.prototype.endSession = function() {
-  cordova.exec(null, null, "IGAworksManager", "endSession", []);
+IGAworksConnectPlugin.prototype.openOfferWall = function(s, f) {
+  cordova.exec(s, f, "IGAworksConnectPlugin", "openOfferWall", []);
 };
 
-IGAworksManager.prototype.setUserID = function(userID, s, f) {
-  cordova.exec(s, f, "IGAworksManager", "setUserID", [userID]);
+
+IGAworksConnectPlugin.prototype.openDialogTypeOfferWall = function(s, f) {
+  cordova.exec(s, f, "IGAworksConnectPlugin", "openDialogTypeOfferWall", []);
 };
 
-module.exports = new IGAworksManager();
+module.exports = new IGAworksConnectPlugin();
