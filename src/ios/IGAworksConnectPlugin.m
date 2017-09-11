@@ -1,70 +1,102 @@
-#import "NaverThirdPartyConstantsForApp.h"
-#import "NLoginThirdPartyOAuth20InAppBrowserViewController.h"
-#import "NaverLoginPlugin.h"
+#import <AdSupport/AdSupport.h>
+#import <IgaworksCore/IgaworksCore.h>
+#import <IgaworksCore/IgaworksCore.h>
+#import <AdPopcornOfferwall/AdPopcornOfferwall.h>
+#import <AdPopcornOfferwall/AdPopcornStyle.h>
+
 
 @implementation IGAworksConnectPlugin
 
-CDVInvokedUrlCommand *_command;
+    CDVInvokedUrlCommand *_command;
 
-- (void)pluginInitialize
-{
-    NaverThirdPartyLoginConnection *thirdConn = [NaverThirdPartyLoginConnection getSharedInstance];
-    thirdConn.delegate = self;
-    [thirdConn setIsNaverAppOauthEnable:YES];
-    [thirdConn setIsInAppOauthEnable:YES];
-    [thirdConn setServiceUrlScheme:kServiceAppUrlScheme];
-    [thirdConn setConsumerKey:kConsumerKey];
-    [thirdConn setConsumerSecret:kConsumerSecret];
-    [thirdConn setAppName:kServiceAppName];
+    - (void)pluginInitialize
+    {
+        if (NSClassFromString(@"ASIdentifierManager")){
+            NSUUID *ifa =[[ASIdentifierManager sharedManager]advertisingIdentifier];
+            BOOL isAppleAdvertisingTrackingEnalbed = [[ASIdentifierManager sharedManager]isAdvertisingTrackingEnabled];
+            [IgaworksCore setAppleAdvertisingIdentifier:[ifa UUIDString] isAppleAdvertisingTrackingEnabled:isAppleAdvertisingTrackingEnalbed];
 
-}
+            NSLog(@"[ifa UUIDString] %@", [ifa UUIDString]);
+        }
 
-- (void)login:(CDVInvokedUrlCommand *)command
-{
-    _command = command;
-    [[NaverThirdPartyLoginConnection getSharedInstance] requestThirdPartyLogin];
-}
+        // Igaworks appkey, hashkey setting
+        [IgaworksCore igaworksCoreWithAppKey:@"YOUR_APP_KEY" andHashKey:@"YOUR_HASH_KEY"];
+        [IgaworksCore shared].useIgaworksRewardServer = NO;
 
-- (void)oauth20ConnectionDidFinishRequestACTokenWithAuthCode
-{
-    [self.commandDelegate runInBackground:^{
-        NSString *accessToken = [[NaverThirdPartyLoginConnection getSharedInstance] accessToken];
+        // 오퍼월 테마 색상 변경
+        [AdPopcornStyle sharedInstance].adPopcornCustomThemeColor = [UIColor blackColor];
 
-        CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString: accessToken];
+        // 오퍼월 타이틀 변경
+        [AdPopcornStyle sharedInstance].adPopcornCustomOfferwallTitle = @"마피아 캐시 무료 충전";
 
+        // 오퍼월 타이틀 색상 변경
+        [AdPopcornStyle sharedInstance].adPopcornCustomOfferwallTitleColor = [UIColor whiteColor];
+
+        // 오퍼월 Top/bottom bar 색상 변경
+        [AdPopcornStyle sharedInstance].adPopcornCustomOfferwallTitleBackgroundColor = [UIColor blackColor];
+    }
+
+    - (void)setUserID:(CDVInvokedUrlCommand *)command
+    {
+        _command = command;
+        [[NaverThirdPartyLoginConnection getSharedInstance] requestThirdPartyLogin];
+    }
+
+    - (void)openOfferWall
+    {
+        [AdPopcornOfferwall openOfferWallWithViewController:self delegate:self userDataDictionaryForFilter:nil];
+        [AdPopcornOfferwall shared].delegate = self;
+    }
+
+    - (void)openDialogTypeOfferWall
+    {
+        [AdPopcornOfferwall openOfferWallWithViewController:self delegate:self userDataDictionaryForFilter:nil];
+        [AdPopcornOfferwall shared].delegate = self;
+    }
+
+    /* ADPOPCORN OFFERWAL DELEGATES START */
+    -(void)willOpenOfferWall {
+        //Offerwall will be opened
+    }
+    -(void)didOpenOfferWall {
+        //Offerwall did opened
+    }
+    -(void)willCloseOfferWall {
+        //Offerwall will bel closed
+    }
+    -(void)didCloseOfferWall {
+        //Offerwall did closed
+    }
+    /* ADPOPCORN OFFERWAL DELEGATES END */
+
+    -(void)onRewardRequestResult:(BOOL)isSuccess withMessage:(NSString *)message items:(NSArray *)items{
+        for (RewardInfo *item in items) {
+            NSString *campaignKey = item.campaignKey;
+            NSString *campaignName = item.campaignName;
+            NSString *rewardKey = item.RTID;
+            NSUInteger quantity = item.quantity;
+
+            //유효한 RewardKey 인지 확인합니다.
+            [AdPopcornOfferwall didGiveRewardItemWithRewardKey:item.RTID];
+        }
+    }
+
+    - (void)onRewardCompleteResult:(BOOL)isSuccess withMessage:(NSString *)message resultCode:(NSUInteger)resultCode withCompletedRewardKey:(NSString *)completedRewardKey {
+        // RewardCompleteResult resultCode
+        //    1 : Succeed
+        //    100 : Error
+        //    200 : Unknown Exception
+        //    1400 : Invalid Appkey
+        //    1410 : Incorrect reward server type
+        //    3000 : Invalid Hashkey
+
+        CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString: completedRewardKey];
         [self.commandDelegate sendPluginResult:pluginResult callbackId:_command.callbackId];
-    }];
-}
 
-- (void)oauth20ConnectionDidOpenInAppBrowserForOAuth:(NSURLRequest *)request
-{
-    [self presentWebviewControllerWithRequest:request];
-}
+        // 본 델리게이트의 수신 결과가 성공일 때에만 유저에게 리워드 지급 처리를 합니다.
+        // 한번 지급 처리한 completedRewardKey 에 대해서는 다시 리워드 지급을 하면 안됩니다.
+    }
 
-- (void) presentWebviewControllerWithRequest:(NSURLRequest *)urlRequest   {
-    // FormSheet모달위에 FullScreen모달이 뜰 떄 애니메이션이 이상하게 동작하여 애니메이션이 없도록 함
-    NLoginThirdPartyOAuth20InAppBrowserViewController *inAppBrowserViewController = [[NLoginThirdPartyOAuth20InAppBrowserViewController alloc] initWithRequest:urlRequest];
-    inAppBrowserViewController.parentOrientation = (UIInterfaceOrientation)[[UIDevice currentDevice] orientation];
-    [self.viewController presentViewController:inAppBrowserViewController animated:NO completion:nil];
-}
 
-- (void)oauth20ConnectionDidFinishRequestACTokenWithRefreshToken
-{
-    [self.commandDelegate runInBackground:^{
-        NSString *accessToken = [[NaverThirdPartyLoginConnection getSharedInstance] accessToken];
-
-        CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString: accessToken];
-
-        [self.commandDelegate sendPluginResult:pluginResult callbackId:_command.callbackId];
-    }];
-}
-- (void)oauth20ConnectionDidFinishDeleteToken
-{
-
-}
-- (void)oauth20Connection:(NaverThirdPartyLoginConnection *)oauthConnection didFailWithError:(NSError *)error
-{
-
-}
 
 @end

@@ -76,7 +76,7 @@
     </platform>
 
     <!-- ios -->
-    <!-- <platform name="ios">
+    <platform name="ios">
         <js-module src="www/igaworks-native.js" name="IGAworksConnectPlugin">
             <clobbers target="igaWorksConnectPlugin" />
         </js-module>
@@ -87,78 +87,30 @@
                 <param name="onload" value="true" />
             </feature>
             <plugin name="IGAworksConnectPlugin" value="IGAworksConnectPlugin"/>
-            <access origin="https://m.facebook.com" />
-            <access origin="https://graph.facebook.com" />
-            <access origin="https://api.facebook.com" />
-            <access origin="https://*.fbcdn.net" />
-            <access origin="https://*.akamaihd.net" />
+            <!--<access origin="https://m.facebook.com" />-->
         </config-file>
 
-        <header-file src="src/ios/FacebookConnectPlugin.h" />
-        <source-file src="src/ios/FacebookConnectPlugin.m" />
+        <header-file src="src/ios/IGAworksConnectPlugin.h" />
+        <source-file src="src/ios/IGAworksConnectPlugin.m" />
 
-        <config-file target="*-Info.plist" parent="FacebookAppID">
-            <string>$APP_ID</string>
+        <config-file target="*-Info.plist" parent="IGAworksRewardServerType">
+            <string>$SERVER_TYPE</string>
         </config-file>
 
-        <config-file target="*-Info.plist" parent="FacebookDisplayName">
-            <string>$APP_NAME</string>
+        <config-file target="*-Info.plist" parent="IGAworksAppKey">
+            <string>$APP_KEY</string>
         </config-file>
 
-        <config-file target="*-Info.plist" parent="CFBundleURLTypes">
-          <array>
-            <dict>
-              <key>CFBundleURLSchemes</key>
-              <array>
-                <string>fb$APP_ID</string>
-              </array>
-            </dict>
-          </array>
+        <config-file target="*-Info.plist" parent="IGAworksHashKey">
+            <string>$HASH_KEY</string>
         </config-file>
 
-        <config-file target="*-Info.plist" parent="NSAppTransportSecurity">
-          <dict>
-            <key>NSExceptionDomains</key>
-            <dict>
-                <key>facebook.com</key>
-                <dict>
-                    <key>NSIncludesSubdomains</key>
-                    <true/>
-                    <key>NSThirdPartyExceptionRequiresForwardSecrecy</key>
-                    <false/>
-                </dict>
-                <key>fbcdn.net</key>
-                <dict>
-                    <key>NSIncludesSubdomains</key>
-                    <true/>
-                    <key>NSThirdPartyExceptionRequiresForwardSecrecy</key>
-                    <false/>
-                </dict>
-                <key>akamaihd.net</key>
-                <dict>
-                    <key>NSIncludesSubdomains</key>
-                    <true/>
-                    <key>NSThirdPartyExceptionRequiresForwardSecrecy</key>
-                    <false/>
-                </dict>
-            </dict>
-          </dict>
-        </config-file>
-
-        <config-file target="*-Info.plist" parent="LSApplicationQueriesSchemes">
-          <array>
-            <string>fbapi</string>
-            <string>fb-messenger-api</string>
-            <string>fbauth2</string>
-            <string>fbshareextension</string>
-          </array>
-        </config-file>
+        <resource-file src="src/ios/AdPopcornOfferwall.framework/Versions/A/Resources/AdPopcornOfferwall.bundle" />
 
         <framework src="src/ios/AdPopcornDA.framework" custom="true" />
         <framework src="src/ios/AdPopcornOfferwall.framework" custom="true" />
         <framework src="src/ios/IgaworksCore.framework" custom="true" />
-
-    </platform> -->
+    </platform>
 
     <!-- after_prepare hook to populate APP_KEY -->
     <hook type="after_prepare" src="scripts/after_prepare.js" />
