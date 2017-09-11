@@ -19,7 +19,11 @@
 
 package org.apache.cordova.igaworks;
 
+import android.graphics.Color;
+
 import com.igaworks.IgawCommon;
+import com.igaworks.adpopcorn.IgawAdpopcorn;
+import com.igaworks.adpopcorn.style.ApStyleManager;
 
 import org.apache.cordova.*;
 import org.json.JSONArray;
@@ -28,16 +32,6 @@ import org.json.JSONException;
 public class IGAworksConnectPlugin extends CordovaPlugin {
     @Override
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
-        if (action.equals("startSession")) {
-            IgawCommon.startSession(this.cordova.getActivity());
-            callbackContext.success("sucess");
-            return true;
-        }
-        if (action.equals("endSession")) {
-            IgawCommon.endSession();
-            callbackContext.success("sucess");
-            return true;
-        }
         if (action.equals("setUserID")) {
             String message = args.getString(0);
             if (message != null && message.length() > 0) {
@@ -46,7 +40,54 @@ public class IGAworksConnectPlugin extends CordovaPlugin {
             } else {
                 callbackContext.error("Expected one non-empty string argument.");
             }
+            return true;
+        }
+        if (action.equals("openOfferWall")) {
+            IgawAdpopcorn.openOfferWall(this.cordova.getActivity());
+            callbackContext.success("success");
+            return true;
+        }
+        if (action.equals("openDialogTypeOfferWall")) {
+            IgawAdpopcorn.openDialogTypeOfferWall(this.cordova.getActivity());
+            callbackContext.success("success");
+            return true;
+        }
+        if (action.equals("showVideoAd")) {
+            // IgawAdpopcorn.showVideoAd(this, new IAPShowVideoAdEventListener() {
+            //     @Override
+            //     public void OnShowVideoAdSuccess() {
+            //         // Video Showing Succeeded
+            //     }
+
+            //     @Override
+            //     public void OnShowVideoAdFailure(APVideoError apVideoError) {
+            //         // Video Showing Failed
+            //         // ErrorCode 
+            //         //      TERMINATED_OR_INVALID_CAMPAIGN =  980;
+            //         //      TERMINATED_OR_INVALID_CAMPAIGN =  999;
+            //         //      ALREADY_COMPLETED_CAMPAIGN =  2000;
+            //     }
+
+            //     @Override
+            //     public void OnVideoAdClose() {
+            //         // VideoAd Closed
+            //     }
+            // });
         }
         return false;
+    }
+
+    @Override
+    public void onResume(boolean multitasking) {
+        IgawCommon.startSession(this.cordova.getActivity());
+        ApStyleManager.setOfferwallTitle("마피아 캐시 무료 충전");
+        ApStyleManager.setThemeColor(Color.BLACK);
+        ApStyleManager.setOfferwallTitleColor(Color.WHITE);
+        ApStyleManager.setOfferwallTitleBackgroundColor(Color.BLACK);
+    }
+
+    @Override
+    public void onPause(boolean multitasking) {
+        IgawCommon.endSession();
     }
 }
