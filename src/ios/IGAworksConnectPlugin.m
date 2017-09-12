@@ -1,8 +1,8 @@
 #import <AdSupport/AdSupport.h>
 #import <IgaworksCore/IgaworksCore.h>
-#import <IgaworksCore/IgaworksCore.h>
 #import <AdPopcornOfferwall/AdPopcornOfferwall.h>
 #import <AdPopcornOfferwall/AdPopcornStyle.h>
+#import "IGAworksConnectPlugin.h"
 
 
 @implementation IGAworksConnectPlugin
@@ -18,9 +18,13 @@
 
             NSLog(@"[ifa UUIDString] %@", [ifa UUIDString]);
         }
+        
+        NSBundle* mainBundle = [NSBundle mainBundle];
+        NSString *appKey = [mainBundle objectForInfoDictionaryKey:@"IGAworksAppKey"];
+        NSString *hashKey = [mainBundle objectForInfoDictionaryKey:@"IGAworksHashKey"];
 
         // Igaworks appkey, hashkey setting
-        [IgaworksCore igaworksCoreWithAppKey:@"YOUR_APP_KEY" andHashKey:@"YOUR_HASH_KEY"];
+        [IgaworksCore igaworksCoreWithAppKey:appKey andHashKey:hashKey];
         [IgaworksCore shared].useIgaworksRewardServer = NO;
 
         // 오퍼월 테마 색상 변경
@@ -38,19 +42,29 @@
 
     - (void)setUserID:(CDVInvokedUrlCommand *)command
     {
-        _command = command;
-        [[NaverThirdPartyLoginConnection getSharedInstance] requestThirdPartyLogin];
+        if ([command.arguments count] == 0) {
+            // Not enough arguments
+            CDVPluginResult *res = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"Invalid arguments"];
+            [self.commandDelegate sendPluginResult:res callbackId:command.callbackId];
+            return;
+        }
+
+        NSString *userID = [command.arguments objectAtIndex:0];
+        [IgaworksCore setUserId:userID];
+        CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString: userID];
+        [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+
     }
 
-    - (void)openOfferWall
+    - (void)openOfferWall:(CDVInvokedUrlCommand *)command
     {
-        [AdPopcornOfferwall openOfferWallWithViewController:self delegate:self userDataDictionaryForFilter:nil];
+        [AdPopcornOfferwall openOfferWallWithViewController:self.viewController delegate:self userDataDictionaryForFilter:nil];
         [AdPopcornOfferwall shared].delegate = self;
     }
 
-    - (void)openDialogTypeOfferWall
+    - (void)openDialogTypeOfferWall:(CDVInvokedUrlCommand *)command
     {
-        [AdPopcornOfferwall openOfferWallWithViewController:self delegate:self userDataDictionaryForFilter:nil];
+        [AdPopcornOfferwall openOfferWallWithViewController:self.viewController delegate:self userDataDictionaryForFilter:nil];
         [AdPopcornOfferwall shared].delegate = self;
     }
 
@@ -70,18 +84,10 @@
     /* ADPOPCORN OFFERWAL DELEGATES END */
 
     -(void)onRewardRequestResult:(BOOL)isSuccess withMessage:(NSString *)message items:(NSArray *)items{
-        for (RewardInfo *item in items) {
-            NSString *campaignKey = item.campaignKey;
-            NSString *campaignName = item.campaignName;
-            NSString *rewardKey = item.RTID;
-            NSUInteger quantity = item.quantity;
 
-            //유효한 RewardKey 인지 확인합니다.
-            [AdPopcornOfferwall didGiveRewardItemWithRewardKey:item.RTID];
-        }
     }
 
-    - (void)onRewardCompleteResult:(BOOL)isSuccess withMessage:(NSString *)message resultCode:(NSUInteger)resultCode withCompletedRewardKey:(NSString *)completedRewardKey {
+    - (void)onRewardCompleteResult:(BOOL)isSuccess withMessage:(NSString *)message resultCode:(NSInteger)resultCode withCompletedRewardKey:(NSString *)completedRewardKey {
         // RewardCompleteResult resultCode
         //    1 : Succeed
         //    100 : Error

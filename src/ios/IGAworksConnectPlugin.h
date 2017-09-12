@@ -1,12 +1,13 @@
 
 #import <Foundation/Foundation.h>
-#import <FBSDKCoreKit/FBSDKCoreKit.h>
-#import <FBSDKLoginKit/FBSDKLoginKit.h>
-#import <FBSDKShareKit/FBSDKShareKit.h>
+#import <AdSupport/AdSupport.h>
+#import <IgaworksCore/IgaworksCore.h>
+#import <AdPopcornOfferwall/AdPopcornOfferwall.h>
+#import <AdPopcornOfferwall/AdPopcornStyle.h>
 #import <Cordova/CDV.h>
 #import "AppDelegate.h"
 
-@interface IGAworksConnectPlugin : CDVPlugin <AdPopcornOfferwallClientRewardDelgate>
+@interface IGAworksConnectPlugin : CDVPlugin <AdPopcornOfferwallDelegate, AdPopcornOfferwallClientRewardDelegate>
 - (void)setUserID:(CDVInvokedUrlCommand *)command;
 - (void)openOfferWall:(CDVInvokedUrlCommand *)command;
 - (void)openDialogTypeOfferWall:(CDVInvokedUrlCommand *)command;
