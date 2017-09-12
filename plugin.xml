@@ -109,10 +109,10 @@
 
         <resource-file src="src/ios/AdPopcornOfferwall.framework/Versions/A/Resources/AdPopcornOfferwall.bundle" />
 
-        <framework src="src/ios/AdPopcornDA.framework" custom="true" />
-        <framework src="src/ios/AdPopcornOfferwall.framework" custom="true" />
-        <framework src="src/ios/IgaworksCore.framework" custom="true" />
-
+        <framework src="GoogleToolboxForMac" type="podspec" spec="~> 2.1.1" />
+        <framework src="AdPopcornDA" type="podspec" spec="~> 2.1.3" />
+        <framework src="AdPopcornOfferwall" type="podspec" spec="~> 3.0.2" />
+        <framework src="IgaworksCore" type="podspec" spec="~> 2.3.9" />
     </platform>
 
     <!-- after_prepare hook to populate APP_KEY -->
