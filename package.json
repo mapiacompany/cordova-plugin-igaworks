@@ -1,16 +1,16 @@
 {
-  "name": "ionic-plugin-igaworks",
+  "name": "cordova-plugin-igaworks",
   "version": "0.0.1",
   "description": "Cordova IGAworks Plugin",
   "cordova": {
-    "id": "ionic-plugin-igaworks",
+    "id": "cordova-plugin-igaworks",
     "platforms": [
       "android"
     ]
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/mapiacompany/ionic-plugin-igaworks"
+    "url": "https://github.com/mapiacompany/cordova-plugin-igaworks"
   },
   "keywords": [
     "cordova",
