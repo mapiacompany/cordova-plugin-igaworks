@@ -29,6 +29,8 @@
 
     <!-- android -->
     <platform name="android">
+        <framework src="com.android.installreferrer:installreferrer:1.0" />
+
         <js-module src="www/igaworks-native.js" name="IGAworksConnectPlugin">
             <clobbers target="igaWorksConnectPlugin" />
         </js-module>
@@ -58,6 +60,11 @@
             <activity android:name="com.igaworks.adpopcorn.activity.ApVideoAdActivity"
                 android:theme="@android:style/Theme.NoTitleBar"
                 android:screenOrientation="landscape"/>
+            <receiver android:name="com.igaworks.IgawReceiver" android:exported="true">
+                <intent-filter>
+                    <action android:name="com.android.vending.INSTALL_REFERRER"/>
+                </intent-filter>
+            </receiver>
         </config-file>
 
         <config-file target="AndroidManifest.xml" parent="/manifest">
@@ -69,8 +76,8 @@
 
         <!-- <resource-file src="www/drawable/logo.png" target="res/drawable-hdpi/logo.png" /> -->
 
-        <lib-file src="src/android/libs/IgawAdpopcorn_v5.0.5a.jar"/>
-        <lib-file src="src/android/libs/IgawCommon_v4.5.1a.jar"/>
+        <lib-file src="src/android/libs/IgawAdpopcorn_v5.1.3a.jar"/>
+        <lib-file src="src/android/libs/IgawCommon_v4.5.4a.jar"/>
 
         <!-- cordova plugin src files -->
         <source-file src="src/android/IGAworksConnectPlugin.java" target-dir="src/org/apache/cordova/igaworks" />
