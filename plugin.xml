@@ -2,7 +2,7 @@
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
         xmlns:android="http://schemas.android.com/apk/res/android"
         id="cordova-plugin-igaworks"
-        version="0.0.1">
+        version="0.0.2">
 
     <name>cordova-plugin-igaworks</name>
 
@@ -21,10 +21,7 @@
     <preference name="SERVER_TYPE" />
 
     <engines>
-        <!-- Requires > 3.5.0 because of the custom Framework tag for iOS [CB-6698] -->
-        <!-- Requires > 4.0.0 because of the Framework tag for Android that uses gradle -->
-        <engine name="cordova-android" version=">=3.5.0" />
-<!--         <engine name="cordova-ios" version=">=3.5.0" /> -->
+        <engine name="cordova-android" version=">=4.0.0" />
     </engines>
 
     <!-- android -->
@@ -41,7 +38,7 @@
                 <param name="onload" value="true" />
             </feature>
             <access origin="*" />
-            <preference name="android-minSdkVersion" value="15" />
+            <preference name="android-minSdkVersion" value="19" />
         </config-file>
 
         <source-file src="src/android/igaworksconnect.xml" target-dir="res/values" />
@@ -77,8 +74,8 @@
 
         <!-- <resource-file src="www/drawable/logo.png" target="res/drawable-hdpi/logo.png" /> -->
 
-        <lib-file src="src/android/libs/IgawAdpopcorn_v5.1.3a.jar"/>
-        <lib-file src="src/android/libs/IgawCommon_v4.5.4a.jar"/>
+        <lib-file src="src/android/libs/IgawAdpopcorn_v5.1.7a.jar"/>
+        <lib-file src="src/android/libs/IgawCommon_v4.5.5a.jar"/>
 
         <!-- cordova plugin src files -->
         <source-file src="src/android/IGAworksConnectPlugin.java" target-dir="src/org/apache/cordova/igaworks" />
