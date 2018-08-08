@@ -32,7 +32,7 @@
             <clobbers target="igaWorksConnectPlugin" />
         </js-module>
 
-        <config-file target="res/xml/config.xml" parent="/*">
+        <config-file target="app/src/main/res/xml/config.xml" parent="/*">
             <feature name="IGAworksConnectPlugin">
                 <param name="android-package" value="org.apache.cordova.igaworks.IGAworksConnectPlugin" />
                 <param name="onload" value="true" />
@@ -41,14 +41,14 @@
             <preference name="android-minSdkVersion" value="19" />
         </config-file>
 
-        <source-file src="src/android/igaworksconnect.xml" target-dir="res/values" />
-        <config-file target="res/values/igaworksconnect.xml" parent="/*">
+        <source-file src="src/android/igaworksconnect.xml" target-dir="app/src/main/res/values" />
+        <config-file target="app/src/main/res/values/igaworksconnect.xml" parent="/*">
             <string name="igaworks_reward_server_type">$SERVER_TYPE</string>
             <string name="igaworks_app_key">$ANDROID_APP_KEY</string>
             <string name="igaworks_hash_key">$ANDROID_HASH_KEY</string>
         </config-file>
 
-        <config-file target="AndroidManifest.xml" parent="application">
+        <config-file target="app/src/main/AndroidManifest.xml" parent="application">
             <meta-data android:name="igaworks_reward_server_type" android:value="@string/igaworks_reward_server_type" />
             <meta-data android:name="igaworks_app_key" android:value="@string/igaworks_app_key" />
             <meta-data android:name="igaworks_hash_key" android:value="@string/igaworks_hash_key" />
