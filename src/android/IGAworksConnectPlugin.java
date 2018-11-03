@@ -56,26 +56,27 @@ public class IGAworksConnectPlugin extends CordovaPlugin {
             return true;
         }
         if (action.equals("showVideoAd")) {
-            // IgawAdpopcorn.showVideoAd(this, new IAPShowVideoAdEventListener() {
-            //     @Override
-            //     public void OnShowVideoAdSuccess() {
-            //         // Video Showing Succeeded
-            //     }
+            IgawAdpopcorn.showVideoAd(cordova.getContext(), new IAPShowVideoAdEventListener() {
+                @Override
+                public void OnShowVideoAdSuccess() {
+                    callbackContext.success("success");
+                }
 
-            //     @Override
-            //     public void OnShowVideoAdFailure(APVideoError apVideoError) {
-            //         // Video Showing Failed
-            //         // ErrorCode 
-            //         //      TERMINATED_OR_INVALID_CAMPAIGN =  980;
-            //         //      TERMINATED_OR_INVALID_CAMPAIGN =  999;
-            //         //      ALREADY_COMPLETED_CAMPAIGN =  2000;
-            //     }
+                @Override
+                public void OnShowVideoAdFailure(APVideoError apVideoError) {
+                    // Video Showing Failed
+                    // ErrorCode
+                    //      TERMINATED_OR_INVALID_CAMPAIGN =  980;
+                    //      TERMINATED_OR_INVALID_CAMPAIGN =  999;
+                    //      ALREADY_COMPLETED_CAMPAIGN =  2000;
+                    callbackContext.error(apVideoError.getErrorCode());
+                }
 
-            //     @Override
-            //     public void OnVideoAdClose() {
-            //         // VideoAd Closed
-            //     }
-            // });
+                @Override
+                public void OnVideoAdClose() {
+                    // VideoAd Closed
+                }
+            });
         }
         return false;
     }
