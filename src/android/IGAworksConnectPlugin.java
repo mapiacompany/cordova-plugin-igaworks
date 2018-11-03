@@ -25,6 +25,7 @@ import android.graphics.Color;
 import com.igaworks.IgawCommon;
 import com.igaworks.adpopcorn.IgawAdpopcorn;
 import com.igaworks.adpopcorn.cores.common.APVideoError;
+import com.igaworks.adpopcorn.interfaces.IAPLoadVideoAdEventListener;
 import com.igaworks.adpopcorn.interfaces.IAPShowVideoAdEventListener;
 import com.igaworks.adpopcorn.style.ApStyleManager;
 
@@ -57,8 +58,29 @@ public class IGAworksConnectPlugin extends CordovaPlugin {
             callbackContext.success("success");
             return true;
         }
+        if (action.equals("loadVideoAd")) {
+            cordova.getThreadPool().execute(() -> IgawAdpopcorn.loadVideoAd(cordova.getContext(), new IAPLoadVideoAdEventListener() {
+                @Override
+                public void OnLoadVideoAdSuccess() {
+                    // Video Loading Succeeded
+                    callbackContext.success("success");
+                }
+
+                @Override
+                public void OnLoadVideoAdFailure(APVideoError apVideoError) {
+                    // Video Loading Failed.
+                    // apVideoError errorCode
+                    //    EXCEPTION = 200
+                    //    ADID_ABUSING = 500
+                    //    CAN_NOT_FIND_AVAILABLE_CAMPAIGN = 1000
+                    //    INVALID_MEDIA_KEY = 1400
+                    //    USER_IDENTIFIER_MISSING = 2250
+                    callbackContext.error(apVideoError.getErrorCode());
+                }
+            }));
+        }
         if (action.equals("showVideoAd")) {
-            IgawAdpopcorn.showVideoAd(cordova.getContext(), new IAPShowVideoAdEventListener() {
+            cordova.getThreadPool().execute(() -> IgawAdpopcorn.showVideoAd(cordova.getContext(), new IAPShowVideoAdEventListener() {
                 @Override
                 public void OnShowVideoAdSuccess() {
                     callbackContext.success("success");
@@ -78,7 +100,7 @@ public class IGAworksConnectPlugin extends CordovaPlugin {
                 public void OnVideoAdClose() {
                     // VideoAd Closed
                 }
-            });
+            }));
         }
         return false;
     }

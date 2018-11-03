@@ -4,6 +4,10 @@ IGAworksConnectPlugin.prototype.setUserID = function(userID, s, f) {
   cordova.exec(s, f, "IGAworksConnectPlugin", "setUserID", [userID]);
 };
 
+IGAworksConnectPlugin.prototype.loadVideoAd = function (s, f) {
+  cordova.exec(s, f, "IGAworksConnectPlugin", "loadVideoAd", []);
+};
+
 IGAworksConnectPlugin.prototype.showVideoAd = function (s, f) {
   cordova.exec(s, f, "IGAworksConnectPlugin", "showVideoAd", []);
 };
