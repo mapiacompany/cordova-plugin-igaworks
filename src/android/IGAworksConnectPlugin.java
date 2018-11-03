@@ -24,6 +24,8 @@ import android.graphics.Color;
 
 import com.igaworks.IgawCommon;
 import com.igaworks.adpopcorn.IgawAdpopcorn;
+import com.igaworks.adpopcorn.cores.common.APVideoError;
+import com.igaworks.adpopcorn.interfaces.IAPShowVideoAdEventListener;
 import com.igaworks.adpopcorn.style.ApStyleManager;
 
 import org.apache.cordova.*;
