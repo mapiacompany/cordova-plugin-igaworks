@@ -32,12 +32,13 @@ import com.igaworks.adpopcorn.style.ApStyleManager;
 import org.apache.cordova.*;
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.HashMap;
 
 public class IGAworksConnectPlugin extends CordovaPlugin {
     @Override
-    public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
+    public boolean execute(String action, JSONArray args, final CallbackContext callbackContext) throws JSONException {
         if (action.equals("setUserID")) {
             String message = args.getString(0);
             if (message != null && message.length() > 0) {
@@ -75,9 +76,18 @@ public class IGAworksConnectPlugin extends CordovaPlugin {
                     //    CAN_NOT_FIND_AVAILABLE_CAMPAIGN = 1000
                     //    INVALID_MEDIA_KEY = 1400
                     //    USER_IDENTIFIER_MISSING = 2250
-                    callbackContext.error(apVideoError.getErrorCode());
+
+                    try {
+                        callbackContext.error(buildErrorJsonObject(
+                                String.valueOf(apVideoError.getErrorCode()),
+                                apVideoError.getErrorMessage()
+                        ));
+                    } catch (JSONException e) {
+                        callbackContext.error(e.getMessage());
+                    }
                 }
             }));
+            return true;
         }
         if (action.equals("showVideoAd")) {
             cordova.getThreadPool().execute(() -> IgawAdpopcorn.showVideoAd(cordova.getContext(), new IAPShowVideoAdEventListener() {
@@ -93,7 +103,14 @@ public class IGAworksConnectPlugin extends CordovaPlugin {
                     //      TERMINATED_OR_INVALID_CAMPAIGN =  980;
                     //      TERMINATED_OR_INVALID_CAMPAIGN =  999;
                     //      ALREADY_COMPLETED_CAMPAIGN =  2000;
-                    callbackContext.error(apVideoError.getErrorCode());
+                    try {
+                        callbackContext.error(buildErrorJsonObject(
+                                String.valueOf(apVideoError.getErrorCode()),
+                                apVideoError.getErrorMessage()
+                        ));
+                    } catch (JSONException e) {
+                        callbackContext.error(e.getMessage());
+                    }
                 }
 
                 @Override
@@ -101,8 +118,16 @@ public class IGAworksConnectPlugin extends CordovaPlugin {
                     // VideoAd Closed
                 }
             }));
+            return true;
         }
         return false;
+    }
+
+    private JSONObject buildErrorJsonObject(String code, String description) throws JSONException {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("code", code);
+        jsonObject.put("description", description);
+        return jsonObject;
     }
 
     @Override
