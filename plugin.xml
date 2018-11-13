@@ -78,7 +78,7 @@
         <lib-file src="src/android/libs/IgawCommon_v4.6.0.jar"/>
 
         <!-- cordova plugin src files -->
-        <source-file src="src/android/IGAworksConnectPlugin.java" target-dir="src/org/apache/cordova/igaworks" />
+        <source-file src="src/android/IGAworksConnectPlugin.java" target-dir="app/src/main/java/org/apache/cordova/igaworks" />
 
     </platform>
 
