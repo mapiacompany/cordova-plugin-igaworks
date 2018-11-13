@@ -41,7 +41,7 @@
             <preference name="android-minSdkVersion" value="19" />
         </config-file>
 
-        <source-file src="src/android/igaworksconnect.xml" target-dir="app/src/main/res/values" />
+        <source-file src="src/android/igaworksconnect.xml" target-dir="res/values" />
         <config-file target="app/src/main/res/values/igaworksconnect.xml" parent="/*">
             <string name="igaworks_reward_server_type">$SERVER_TYPE</string>
             <string name="igaworks_app_key">$ANDROID_APP_KEY</string>
