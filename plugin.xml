@@ -74,8 +74,8 @@
 
         <!-- <resource-file src="www/drawable/logo.png" target="res/drawable-hdpi/logo.png" /> -->
 
-        <lib-file src="src/android/libs/IgawAdpopcorn_v5.1.8a.jar"/>
-        <lib-file src="src/android/libs/IgawCommon_v4.6.0.jar"/>
+        <lib-file src="src/android/libs/IgawAdpopcorn_v5.2.0a.jar"/>
+        <lib-file src="src/android/libs/IgawCommon_v4.6.3.jar"/>
 
         <!-- cordova plugin src files -->
         <source-file src="src/android/IGAworksConnectPlugin.java" target-dir="app/src/main/java/org/apache/cordova/igaworks" />
