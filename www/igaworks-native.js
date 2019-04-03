@@ -20,6 +20,10 @@ IGAworksConnectPlugin.prototype.setCashReward = function(s, f) {
   cordova.exec(s, f, "IGAworksConnectPlugin", "setCashReward", []);
 };
 
+IGAworksConnectPlugin.prototype.checkRequiredPermission = function(s, f) {
+  cordova.exec(s, f, "IGAworksConnectPlugin", "checkRequiredPermission", []);
+};
+
 IGAworksConnectPlugin.prototype.openDialogTypeOfferWall = function(s, f) {
   cordova.exec(s, f, "IGAworksConnectPlugin", "openDialogTypeOfferWall", []);
 };

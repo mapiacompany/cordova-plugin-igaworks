@@ -51,6 +51,11 @@ public class IGAworksConnectPlugin extends CordovaPlugin {
             return true;
         }
 
+        if (action.equals("checkRequiredPermission")) {
+            IgawAdpopcorn.checkRequiredPermission(this.cordova.getActivity());
+            return true;
+        }
+
         if (action.equals("setCashReward")) {
             IgawAdpopcornExtension.setCashRewardAppFlag(this.cordova.getActivity(),true);
             return true;
