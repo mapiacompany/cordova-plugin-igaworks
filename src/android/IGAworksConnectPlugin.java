@@ -19,17 +19,18 @@
 
 package org.apache.cordova.igaworks;
 
-import android.content.Intent;
 import android.graphics.Color;
 
 import com.igaworks.IgawCommon;
 import com.igaworks.adpopcorn.IgawAdpopcorn;
+import com.igaworks.adpopcorn.IgawAdpopcornExtension;
 import com.igaworks.adpopcorn.cores.common.APVideoError;
 import com.igaworks.adpopcorn.interfaces.IAPLoadVideoAdEventListener;
 import com.igaworks.adpopcorn.interfaces.IAPShowVideoAdEventListener;
 import com.igaworks.adpopcorn.style.ApStyleManager;
 
-import org.apache.cordova.*;
+import org.apache.cordova.CallbackContext;
+import org.apache.cordova.CordovaPlugin;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -49,6 +50,12 @@ public class IGAworksConnectPlugin extends CordovaPlugin {
             }
             return true;
         }
+
+        if (action.equals("setCashReward")) {
+            IgawAdpopcornExtension.setCashRewardAppFlag(this.cordova.getActivity(),true);
+            return true;
+        }
+
         if (action.equals("openOfferWall")) {
             IgawAdpopcorn.openOfferWall(this.cordova.getActivity());
             callbackContext.success("success");
@@ -128,6 +135,13 @@ public class IGAworksConnectPlugin extends CordovaPlugin {
         jsonObject.put("code", code);
         jsonObject.put("description", description);
         return jsonObject;
+    }
+
+    @Override
+    public void onRequestPermissionResult(int requestCode, String[] permissions,
+                                          int[] grantResults) throws JSONException {
+        super.onRequestPermissionResult(requestCode, permissions, grantResults);
+        IgawAdpopcorn.onRequestPermissionsResult(this.cordova.getActivity(), requestCode, permissions, grantResults);
     }
 
     @Override
