@@ -41,6 +41,7 @@ public class IGAworksConnectPlugin extends CordovaPlugin {
     @Override
     public boolean execute(String action, JSONArray args, final CallbackContext callbackContext) throws JSONException {
         if (action.equals("setUserID")) {
+            cordova.setActivityResultCallback(this);
             String message = args.getString(0);
             if (message != null && message.length() > 0) {
                 IgawCommon.setUserId(this.cordova.getActivity(), message);
@@ -52,27 +53,41 @@ public class IGAworksConnectPlugin extends CordovaPlugin {
         }
 
         if (action.equals("checkRequiredPermission")) {
-            IgawAdpopcorn.checkRequiredPermission(this.cordova.getActivity());
+            cordova.setActivityResultCallback(this);
+            cordova.getActivity().runOnUiThread(() -> {
+                IgawAdpopcorn.checkRequiredPermission(cordova.getActivity());
+                callbackContext.success("success");
+            });
             return true;
         }
 
         if (action.equals("setCashReward")) {
-            IgawAdpopcornExtension.setCashRewardAppFlag(this.cordova.getActivity(),true);
+            cordova.setActivityResultCallback(this);
+            cordova.getActivity().runOnUiThread(() -> {
+                IgawAdpopcornExtension.setCashRewardAppFlag(cordova.getContext(), true);
+                callbackContext.success("success");
+            });
             return true;
         }
 
         if (action.equals("openOfferWall")) {
-            IgawAdpopcorn.openOfferWall(this.cordova.getActivity());
-            callbackContext.success("success");
+            cordova.setActivityResultCallback(this);
+            cordova.getActivity().runOnUiThread(() -> {
+                IgawAdpopcorn.openOfferWall(cordova.getContext());
+                callbackContext.success("success");
+            });
             return true;
         }
         if (action.equals("openDialogTypeOfferWall")) {
-            IgawAdpopcorn.openDialogTypeOfferWall(this.cordova.getActivity());
-            callbackContext.success("success");
+            cordova.setActivityResultCallback(this);
+            cordova.getActivity().runOnUiThread(() -> {
+                IgawAdpopcorn.openDialogTypeOfferWall(cordova.getContext());
+                callbackContext.success("success");
+            });
             return true;
         }
         if (action.equals("loadVideoAd")) {
-            cordova.getThreadPool().execute(() -> IgawAdpopcorn.loadVideoAd(cordova.getContext(), new IAPLoadVideoAdEventListener() {
+            cordova.getActivity().runOnUiThread(() -> IgawAdpopcorn.loadVideoAd(cordova.getContext(), new IAPLoadVideoAdEventListener() {
                 @Override
                 public void OnLoadVideoAdSuccess() {
                     // Video Loading Succeeded
@@ -102,7 +117,7 @@ public class IGAworksConnectPlugin extends CordovaPlugin {
             return true;
         }
         if (action.equals("showVideoAd")) {
-            cordova.getThreadPool().execute(() -> IgawAdpopcorn.showVideoAd(cordova.getContext(), new IAPShowVideoAdEventListener() {
+            cordova.getActivity().runOnUiThread(() -> IgawAdpopcorn.showVideoAd(cordova.getContext(), new IAPShowVideoAdEventListener() {
                 @Override
                 public void OnShowVideoAdSuccess() {
                     callbackContext.success("success");
