@@ -16,6 +16,9 @@ IGAworksConnectPlugin.prototype.openOfferWall = function(s, f) {
   cordova.exec(s, f, "IGAworksConnectPlugin", "openOfferWall", []);
 };
 
+IGAworksConnectPlugin.prototype.setCashReward = function(s, f) {
+  cordova.exec(s, f, "IGAworksConnectPlugin", "setCashReward", []);
+};
 
 IGAworksConnectPlugin.prototype.openDialogTypeOfferWall = function(s, f) {
   cordova.exec(s, f, "IGAworksConnectPlugin", "openDialogTypeOfferWall", []);
