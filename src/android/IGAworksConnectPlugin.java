@@ -39,12 +39,36 @@ import java.util.HashMap;
 
 public class IGAworksConnectPlugin extends CordovaPlugin {
     @Override
+    protected void pluginInitialize() {
+        super.pluginInitialize();
+
+        // 스타일 옵션 HashMap 생성
+        HashMap<String, Object> optionMap = new HashMap<>();
+        // 컬러코드는 RGB(ex : #RRGGBB)와 16진수(ex : 0xffee5555) 형식을 지원
+        // 오퍼월 테마 컬러 변경
+        optionMap.put(ApStyleManager.CustomStyle.OFFERWALL_THEME_COLOR, Color.parseColor("#2d2c2d"));
+
+        optionMap.put(ApStyleManager.CustomStyle.TOP_BAR_TEXT_SIZE_DP, 18);
+        optionMap.put(ApStyleManager.CustomStyle.TOP_BAR_TEXT_COLOR, Color.parseColor("#ffffff"));
+        // 오퍼월 탑바 배경 컬러 변경
+        optionMap.put(ApStyleManager.CustomStyle.TOP_BAR_BG_COLOR, Color.parseColor("#000000"));
+
+        optionMap.put(ApStyleManager.CustomStyle.OFFERWALL_TITLE_TEXT, "광고 참여하고 캐시 무료 충전");
+        // 오퍼월 탑바 쉐도우 효과 변경
+        optionMap.put(ApStyleManager.CustomStyle.TOP_BAR_SHADOW, true);
+        optionMap.put(ApStyleManager.CustomStyle.BOTTOM_BAR_BG_COLOR, Color.parseColor("#f7f7f7"));
+        optionMap.put(ApStyleManager.CustomStyle.BOTTOM_BAR_TEXT_COLOR, Color.parseColor("#7b7b7b"));
+        // 세팅된 스타일 옵션 HashMap을 적용
+        ApStyleManager.setCustomOfferwallStyle(optionMap);
+    }
+
+    @Override
     public boolean execute(String action, JSONArray args, final CallbackContext callbackContext) throws JSONException {
         if (action.equals("setUserID")) {
             cordova.setActivityResultCallback(this);
             String message = args.getString(0);
             if (message != null && message.length() > 0) {
-                IgawCommon.setUserId(this.cordova.getActivity(), message);
+                IgawAdpopcorn.setUserId(this.cordova.getActivity(), message);
                 callbackContext.success(message);
             } else {
                 callbackContext.error("Expected one non-empty string argument.");
@@ -162,34 +186,5 @@ public class IGAworksConnectPlugin extends CordovaPlugin {
                                           int[] grantResults) throws JSONException {
         super.onRequestPermissionResult(requestCode, permissions, grantResults);
         IgawAdpopcorn.onRequestPermissionsResult(this.cordova.getActivity(), requestCode, permissions, grantResults);
-    }
-
-    @Override
-    public void onResume(boolean multitasking) {
-        IgawCommon.startSession(this.cordova.getActivity());
-
-        // 스타일 옵션 HashMap 생성
-        HashMap<String, Object> optionMap = new HashMap<>();
-        // 컬러코드는 RGB(ex : #RRGGBB)와 16진수(ex : 0xffee5555) 형식을 지원
-        // 오퍼월 테마 컬러 변경
-        optionMap.put(ApStyleManager.CustomStyle.OFFERWALL_THEME_COLOR, Color.parseColor("#2d2c2d"));
-
-        optionMap.put(ApStyleManager.CustomStyle.TOP_BAR_TEXT_SIZE_DP, 18);
-        optionMap.put(ApStyleManager.CustomStyle.TOP_BAR_TEXT_COLOR, Color.parseColor("#ffffff"));
-        // 오퍼월 탑바 배경 컬러 변경
-        optionMap.put(ApStyleManager.CustomStyle.TOP_BAR_BG_COLOR, Color.parseColor("#000000"));
-
-        optionMap.put(ApStyleManager.CustomStyle.OFFERWALL_TITLE_TEXT, "광고 참여하고 캐시 무료 충전");
-        // 오퍼월 탑바 쉐도우 효과 변경
-        optionMap.put(ApStyleManager.CustomStyle.TOP_BAR_SHADOW, true);
-        optionMap.put(ApStyleManager.CustomStyle.BOTTOM_BAR_BG_COLOR, Color.parseColor("#f7f7f7"));
-        optionMap.put(ApStyleManager.CustomStyle.BOTTOM_BAR_TEXT_COLOR, Color.parseColor("#7b7b7b"));
-        // 세팅된 스타일 옵션 HashMap을 적용
-        ApStyleManager.setCustomOfferwallStyle(optionMap);
-    }
-
-    @Override
-    public void onPause(boolean multitasking) {
-        IgawCommon.endSession();
     }
 }
