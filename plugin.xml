@@ -73,12 +73,12 @@
 
         <!-- <resource-file src="www/drawable/logo.png" target="res/drawable-hdpi/logo.png" /> -->
 
-        <lib-file src="src/android/libs/IgawAdpopcorn_v5.2.0a.jar"/>
         <lib-file src="src/android/libs/IgawCommon_v4.6.3.jar"/>
 
         <!-- cordova plugin src files -->
         <source-file src="src/android/IGAworksConnectPlugin.java" target-dir="app/src/main/java/org/apache/cordova/igaworks" />
 
+        <framework src="src/android/libs/adpopcorn-build.gradle" custom="true" type="gradleReference" />
     </platform>
 
     <!-- ios -->
@@ -93,7 +93,6 @@
                 <param name="onload" value="true" />
             </feature>
             <plugin name="IGAworksConnectPlugin" value="IGAworksConnectPlugin"/>
-            <!--<access origin="https://m.facebook.com" />-->
         </config-file>
 
         <header-file src="src/ios/IGAworksConnectPlugin.h" />
