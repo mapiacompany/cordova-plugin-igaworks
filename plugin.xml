@@ -78,7 +78,7 @@
         <!-- cordova plugin src files -->
         <source-file src="src/android/IGAworksConnectPlugin.java" target-dir="app/src/main/java/org/apache/cordova/igaworks" />
 
-        <framework src="src/android/libs/adpopcorn-build.gradle" custom="true" type="gradleReference" />
+        <framework src="src/android/adpopcorn-build.gradle" custom="true" type="gradleReference" />
     </platform>
 
     <!-- ios -->
